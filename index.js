@@ -15,8 +15,8 @@ app.use(
 app.use(express.json());
 
 // Connect to MongoDB
-const uri = "mongodb://127.0.0.1:27017/MIT-HC";
-//const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTERNAME}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
+//const uri = "mongodb://127.0.0.1:27017/MIT-HC";
+const uri = `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@${process.env.DB_CLUSTERNAME}.mongodb.net/${process.env.DB_NAME}?retryWrites=true&w=majority`;
 mongoose.connect(uri, { useUnifiedTopology: true });
 const db = mongoose.connection;
 db.on("error", console.error.bind(console, "MongoDB connection error:"));
