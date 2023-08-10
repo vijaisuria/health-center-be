@@ -26,6 +26,7 @@ router.post("/", upload.single("file"), async (req, res) => {
         supplierId: item.supplierId,
         countInStock: item.countInStock,
         expdate: dateObject,
+        type: item.type,
       });
     });
 

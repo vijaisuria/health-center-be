@@ -5,10 +5,6 @@ const Schema = mongoose.Schema;
 const medicineSchema = new Schema(
   {
     name: { type: String, required: true },
-    supplierId: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "Supplier",
-    },
     type: String,
     countInStock: {
       type: Number,

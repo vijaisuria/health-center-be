@@ -67,13 +67,14 @@ router.get("/:id", async (req, res) => {
 
 router.post("/", async (req, res) => {
   try {
-    const { name, supplierId, expdate, countInStock } = req.body;
+    const { name, supplierId, expdate, countInStock, type } = req.body;
 
     const medicine = new Medicine({
       name,
       supplierId,
       expdate,
       countInStock,
+      type,
     });
 
     const savedMedicine = await medicine.save();

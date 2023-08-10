@@ -54,6 +54,8 @@ exports.addRequest = async (req, res) => {
       spo2,
       heartRate,
       bloodPressure,
+      tests,
+      medicine,
     } = req.body;
 
     const request = new Prescription({
@@ -70,6 +72,8 @@ exports.addRequest = async (req, res) => {
       heartRate,
       bloodPressure,
       date,
+      medicine,
+      tests,
       isCompleted: false,
       completedBy: "Nurse", // Set to 'Nurse' as nurse raises the request initially
     });
@@ -125,7 +129,8 @@ exports.getRequest = async (req, res) => {
 exports.updateResponse = async (req, res) => {
   try {
     const requestId = req.params.requestId;
-    const { symptoms, medicine, nextVisit, advice } = req.body;
+    const { symptoms, medicine, nextVisit, advice, tests } = req.body;
+    console.log("Request body:", req.body);
 
     const updatedResponse = await Prescription.findByIdAndUpdate(
       requestId,
@@ -133,6 +138,7 @@ exports.updateResponse = async (req, res) => {
         symptoms,
         medicine,
         nextVisit,
+        tests,
         advice,
         isCompleted: true,
         completedBy: "Doctor",
@@ -142,6 +148,7 @@ exports.updateResponse = async (req, res) => {
 
     res.json(updatedResponse);
   } catch (error) {
+    console.log(error);
     res
       .status(500)
       .json({ error: "An error occurred while updating the response" });

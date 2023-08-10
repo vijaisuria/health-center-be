@@ -27,12 +27,21 @@ const prescriptionSchema = new mongoose.Schema(
     spo2: Number,
     heartRate: Number,
     bloodPressure: Number,
+    tests: String,
     date: {
       type: Date,
       required: true,
     },
     symptoms: String,
-    medicine: [String],
+    medicine: [
+      {
+        name: String,
+        dosage: String,
+        food: String,
+        duration: String,
+        type: String,
+      },
+    ],
     nextVisit: Date,
     advice: String,
     isCompleted: {
