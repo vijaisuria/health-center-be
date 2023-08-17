@@ -2,6 +2,62 @@ const express = require("express");
 const router = express.Router();
 const Student = require("../models/student.model");
 
+//auth register student
+router.post("/", async (req, res) => {
+  try {
+    const { name, registerNumber, dob, department, gender } = req.body;
+    console.log(req.body);
+    const existingUser = await Student.findOne({ registerNumber });
+    if (existingUser) {
+      return res.status(409).json({ error: "User already exist" });
+    }
+
+    const newStudent = new Student({
+      name,
+      registerNumber,
+      dob,
+      department,
+      gender,
+      password: dob.toString().slice(0, 10),
+    });
+
+    const savedStudent = await newStudent.save();
+    res.status(201).json({
+      message: "Student signed up successfully",
+      student: savedStudent,
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Sign-up failed" });
+  }
+});
+
+//login student
+router.post("/login", async (req, res) => {
+  try {
+    const { registerNumber, password } = req.body;
+    const student = await Student.findOne({ registerNumber: registerNumber });
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    if (password != student.password) {
+      return res.status(401).json({ error: "Invalid password" });
+    }
+
+    res.status(200).json({
+      message: "Login succesful",
+      student: {
+        name: student.name,
+        registerNumber: student.registerNumber,
+      },
+    });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Login failed" });
+  }
+});
+
 // Get all students
 router.get("/", async (req, res) => {
   try {
@@ -26,24 +82,6 @@ router.get("/reg/:regno", (req, res) => {
       res.status(200).json(student);
     })
     .catch((err) => res.status(400).json({ message: err.message }));
-});
-
-// Create a new student
-router.post("/", async (req, res) => {
-  const student = new Student({
-    name: req.body.name,
-    registerNumber: req.body.registerNumber,
-    dob: req.body.dob,
-    department: req.body.department,
-    gender: req.body.gender,
-  });
-
-  try {
-    const newStudent = await student.save();
-    res.status(201).json(newStudent);
-  } catch (err) {
-    res.status(400).json({ message: err.message });
-  }
 });
 
 // Update a student by ID

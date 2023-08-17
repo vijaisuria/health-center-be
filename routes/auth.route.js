@@ -4,6 +4,7 @@ const Doctor = require("../models/doctor.model");
 const Admin = require("../models/admin.model");
 const Nurse = require("../models/nurse.model");
 const AdminLog = require("../models/adminLog.model");
+const Student = require("../models/student.model");
 
 router.post("/", async (req, res) => {
   try {
@@ -35,6 +36,25 @@ router.post("/nurse", async (req, res) => {
     return res.status(200).json({
       message: "Logged in successfully",
       nurseId: nurse._id,
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(500).json({ message: "Server Error" });
+  }
+});
+
+router.post("/student", async (req, res) => {
+  try {
+    const { registerNumber, password } = req.body;
+    console.log(registerNumber);
+    const student = await Student.findOne({ registerNumber });
+    if (!student)
+      return res.status(400).json({ message: "Studnet does not exist" });
+    if (student.password !== password)
+      return res.status(400).json({ message: "Incorrect password" });
+    return res.status(200).json({
+      message: "Logged in successfully",
+      nurseId: student._id,
     });
   } catch (err) {
     console.log(err);

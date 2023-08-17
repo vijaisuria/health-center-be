@@ -113,6 +113,18 @@ exports.getAllRequests = async (req, res) => {
   }
 };
 
+exports.getAllStudentPrescriptions = async (req, res) => {
+  try {
+    const registerNumber = req.params.reg;
+    const requests = await Prescription.find({ patientRegNo: registerNumber });
+    res.json(requests);
+  } catch (error) {
+    res
+      .status(500)
+      .json({ error: "An error occurred while fetching the requests" });
+  }
+};
+
 // Controller for getting specific request by Id
 exports.getRequest = async (req, res) => {
   try {

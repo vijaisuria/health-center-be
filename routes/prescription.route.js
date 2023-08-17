@@ -21,4 +21,6 @@ router.delete("/:requestId", prescriptionController.deleteRequest);
 
 router.post("/upload-profile-image", prescriptionController.uploadProfileImage);
 
+router.get("/user/:reg", prescriptionController.getAllStudentPrescriptions);
+
 module.exports = router;
