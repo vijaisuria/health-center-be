@@ -26,7 +26,7 @@ const prescriptionSchema = new mongoose.Schema(
     temperature: Number,
     spo2: Number,
     heartRate: Number,
-    bloodPressure: Number,
+    bloodPressure: String,
     tests: String,
     date: {
       type: Date,
