@@ -34,6 +34,8 @@ const studentRouter = require("./routes/student.route");
 const fileUpload = require("./routes/file.route");
 const scheduleRouter = require("./routes/schedule.route");
 const appointmentRouter = require("./routes/appointment.route");
+const queryRouter = require("./routes/query.route");
+const feedbackRouter = require("./routes/feedback.route");
 
 app.use("/api/auth", authRouter);
 app.use("/api/doctor", doctorsRouter);
@@ -45,6 +47,8 @@ app.use("/api/file", fileUpload);
 app.use("/api/students", studentRouter);
 app.use("/api/schedule", scheduleRouter);
 app.use("/api/appointment", appointmentRouter);
+app.use("/api/query", queryRouter);
+app.use("/api/feedback", feedbackRouter);
 
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

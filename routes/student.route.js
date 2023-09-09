@@ -3,9 +3,10 @@ const router = express.Router();
 const Student = require("../models/student.model");
 
 //auth register student
-router.post("/", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
-    const { name, registerNumber, dob, department, gender } = req.body;
+    const { name, registerNumber, dob, department, gender, residence, email } =
+      req.body;
     console.log(req.body);
     const existingUser = await Student.findOne({ registerNumber });
     if (existingUser) {
@@ -15,9 +16,11 @@ router.post("/", async (req, res) => {
     const newStudent = new Student({
       name,
       registerNumber,
+      email,
       dob,
       department,
       gender,
+      residence,
       password: dob.toString().slice(0, 10),
     });
 
@@ -117,6 +120,44 @@ router.delete("/:id", getStudent, async (req, res) => {
     res.json({ message: "Student deleted" });
   } catch (err) {
     res.status(500).json({ message: err.message });
+  }
+});
+
+router.put("/verifyRegister/:registerNumber", async (req, res) => {
+  const { registerNumber } = req.params;
+  const { verifiedBy } = req.body;
+
+  try {
+    const updatedStudent = await Student.findOneAndUpdate(
+      { registerNumber },
+      { verified: true, verifiedBy },
+      { new: true }
+    );
+
+    if (!updatedStudent) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    res.json(updatedStudent);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+});
+
+// Route for getting a student by registerNumber
+router.get("/getStudentByRegisterNumber/:registerNumber", async (req, res) => {
+  const { registerNumber } = req.params;
+
+  try {
+    const student = await Student.findOne({ registerNumber });
+
+    if (!student) {
+      return res.status(404).json({ error: "Student not found" });
+    }
+
+    res.json(student);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

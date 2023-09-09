@@ -82,7 +82,11 @@ router.post("/admin", async (req, res) => {
       return res.status(400).json({ message: "Incorrect password" });
     return res
       .status(200)
-      .json({ message: "Logged in successfully", admin: admin.username });
+      .json({
+        message: "Logged in successfully",
+        admin: admin.username,
+        adminId: admin._id,
+      });
   } catch (err) {
     console.log(err);
     res.status(500).json({ message: "Server Error" });

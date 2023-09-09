@@ -5,9 +5,20 @@ const studentSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  registerNumber: {
+  email: {
     type: String,
     required: true,
+  },
+  registerNumber: {
+    type: String,
+    unique: true,
+    required: true,
+  },
+  programme: {
+    type: String,
+    required: true,
+    enum: ["UG", "PG", "PHD"],
+    default: "UG",
   },
   dob: {
     type: Date,
@@ -24,7 +35,16 @@ const studentSchema = new mongoose.Schema({
   },
   residence: {
     type: String,
+    enum: ["hosteller", "dayscholar", "other"],
     required: true,
+  },
+  verified: {
+    type: Boolean,
+    default: false,
+  },
+  verifiedBy: {
+    type: mongoose.Schema.Types.ObjectId,
+    default: null,
   },
   password: String,
 });
