@@ -4,18 +4,20 @@ const mongoose = require("mongoose");
 
 const staff = require("../models/staff.model");
 
-router.post("/signUp", async (req, res) => {
+router.post("/register", async (req, res) => {
   try {
-    const { name, staffId, dob, department, gender } = req.body;
+    const { name, staffId, dob, email, phone, department, gender } = req.body;
     const existingUser = await staff.findOne({ staffId });
     if (existingUser) {
-      return res.status(409).json({ error: "User already exist" });
+      return res.status(409).json({ error: "Staff already exist" });
     }
 
     const newStaff = new staff({
       name,
       staffId,
       dob,
+      email,
+      phone,
       department,
       gender,
       password: dob.toString().slice(0, 10),
@@ -46,7 +48,7 @@ router.post("/login", async (req, res) => {
 
     res.status(200).json({
       message: "Login succesful",
-      student: {
+      staff: {
         name: Staff.name,
         staffId: Staff.staffId,
       },
@@ -54,6 +56,68 @@ router.post("/login", async (req, res) => {
   } catch (error) {
     console.log(error);
     res.status(500).json({ error: "Login failed" });
+  }
+});
+
+//get all staff
+router.get("/", async (req, res) => {
+  try {
+    const staffs = await staff.find();
+    res.status(200).json(staffs);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to get staffs" });
+  }
+});
+
+//get staff by id
+router.get("/:id", async (req, res) => {
+  try {
+    const staffId = req.params.id;
+    const staff = await staff.findOne({ staffId: staffId });
+    if (!staff) {
+      return res.status(404).json({ error: "Staff not found" });
+    }
+    res.status(200).json(staff);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to get staff" });
+  }
+});
+
+//get staff by staffId
+router.get("/staffId/:staffId", async (req, res) => {
+  try {
+    const staffId = req.params.staffId;
+    const staff = await staff.findOne({ staffId: staffId });
+    if (!staff) {
+      return res.status(404).json({ error: "Staff not found" });
+    }
+    res.status(200).json(staff);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ error: "Failed to get staff" });
+  }
+});
+
+router.put("/verifyStaff/:staffId", async (req, res) => {
+  const { staffId } = req.params;
+  const { verifiedBy } = req.body;
+
+  try {
+    const updatedStaff = await Staff.findOneAndUpdate(
+      { staffId },
+      { verified: true, verifiedBy },
+      { new: true }
+    );
+
+    if (!updatedStaff) {
+      return res.status(404).json({ error: "Staff not found" });
+    }
+
+    res.json(updatedStaff);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
   }
 });
 

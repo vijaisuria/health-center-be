@@ -10,6 +10,10 @@ const staffSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
+  phone: String,
+  email: {
+    type: String,
+  },
   dob: {
     type: Date,
     required: true,
